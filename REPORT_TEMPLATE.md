@@ -1,6 +1,6 @@
 # OdiaEval — Group 9 Scorecard
 
-**Group:** 9 (Group leader: Rudra) — twinned with Group 3
+**Group:** 9
 **Task:** Named-language Inference (NLI) — News / YouTube Comments domain
 **Model:** `ai4bharat/IndicBERTv2-MLM-only`
 **Dataset:** IndicXNLI (Odia, `or`)
