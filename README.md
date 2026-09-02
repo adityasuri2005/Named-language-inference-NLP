@@ -1,8 +1,5 @@
 # OdiaEval — Group 9 (Named-Language Inference)
 
-From the group assignment doc you just uploaded, Group 3 & Group 9 (yours,
-led by Rudra) are both on **Named-language inference**:
-
 | | |
 |---|---|
 | **Dataset** | IndicXNLI |
@@ -32,15 +29,15 @@ skimming if you want to sanity-check hyperparameters against ours.
 
 ## Data note
 
-Your group's dataset link (`ai4bharat/IndicXNLI-Translated`) looks, from
+Our group's dataset link (`ai4bharat/IndicXNLI-Translated`) looks, from
 its HF listing, like a small eval-only mirror (1K–10K rows total) used for
 benchmarking instruction-tuned LLMs — it may not actually contain a
-per-language **train** split you can fine-tune a classifier on. `train_benchmark.py`
+per-language **train** split we can fine-tune a classifier on. `train_benchmark.py`
 tries it first and automatically falls back to `Divyanshu/indicxnli`
 (the original IndicXNLI release — same paper, same content, has the full
 train/validation/test splits: 392,702 / 2,490 / 5,010 per language) if no
 usable train split is found. Whichever repo it actually used gets recorded
-in `benchmark_results.json`, so you can cite the right one in your report.
+in `benchmark_results.json`, so we can cite the right one in our report.
 
 ## Setup
 
@@ -68,7 +65,7 @@ This:
    whether you're within the 1–2 point tolerance (~70.6–74.6%).
 5. Saves the model, tokenizer, and `benchmark_results.json`.
 
-If you land outside tolerance: stop and debug before touching native data.
+If we land outside tolerance: stop and debug before touching native data.
 Likely culprits, in order:
 - Wrong label mapping — verify 0/1/2 against the dataset card.
 - Batch-size / LR mismatch with what actually produced 72.6% (the paper
@@ -86,7 +83,7 @@ python evaluate_native.py \
     --benchmark_results ./indicbertv2-odia-nli/benchmark_results.json
 ```
 
-- Adjust `--premise_col` / `--hypothesis_col` / `--label_col` to match your
+- Adjust `--premise_col` / `--hypothesis_col` / `--label_col` to match our
   professor's file. If labels are strings, pass e.g.
   `--label_map '{"entailment":0,"neutral":1,"contradiction":2}'`.
 - Model, weights, and hyperparameters are unchanged from Step 1 — this
@@ -104,13 +101,3 @@ Fill in `REPORT_TEMPLATE.md`:
 
 Never average, merge, or replace one score with the other — report both,
 separately, alongside the gap.
-
-## For context: the other groups' tasks
-
-| Group | Task | Model | Target |
-|---|---|---|---|
-| 1, 8 | Sentiment Analysis | IndicBERTv2-MLM-only | 90.7% acc |
-| 2, 5 | Named-entity recognition | IndicBERTv2-MLM-only | 27.05 entity-F1 |
-| **3, 9** | **Named-language inference** | **IndicBERTv2-MLM-only** | **72.6% acc** |
-| 4 | Romanized / code-mixed robustness | IndicLID-FTR | 80.40% acc / 76.44 Odia F1 |
-| 6, 7 | Hate-speech detection | IndicBERTv2-MLM-only (+ weak-labeling pipeline) | 90.94 macro-F1 |
