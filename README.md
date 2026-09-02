@@ -20,7 +20,7 @@ comes from **Table 16** of the follow-up paper that introduced
 
 Table 16 there reports, per language, IndicXNLI accuracy for several
 models; the "IndicBERT" row (MLM-only, no extra parallel-data objective)
-gives **or (Odia) = 72.6**, exactly matching your assignment's target —
+gives **or (Odia) = 72.6**, exactly matching our assignment's target —
 so that's confirmed as the right number to reproduce.
 
 Official fine-tuning code for this exact setup exists at
