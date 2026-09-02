@@ -22,6 +22,11 @@ strings to the model's label scheme if needed, e.g.:
 IMPORTANT: Do not change the model, its weights, or any hyperparameter
 between Step 1 and Step 2. This script only loads the saved checkpoint
 and runs inference.
+
+This script is unaffected by which IndicXNLI dataset repo Step 1 used for
+fine-tuning/benchmark-testing — it only reads the professor-provided
+native_file. See train_benchmark.py's header for why that step sources
+Odia data from Divyanshu/indicxnli rather than ai4bharat/IndicXNLI-Translated.
 """
 import argparse
 import json

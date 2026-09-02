@@ -24,6 +24,15 @@ Usage:
 
 Run this on a GPU (Colab T4/A100, or any CUDA machine). It will NOT run
 usefully on CPU (392K training examples).
+
+NOTE ON DATA SOURCE: the assignment's dataset link (ai4bharat/IndicXNLI-
+Translated) was inspected directly and does not contain genuine Odia-script
+text (its per-language columns are English back-translations used only for
+translation-quality scoring, and it has no train split). This script
+therefore loads Odia data from the full IndicXNLI release
+(Divyanshu/indicxnli) instead, which is the same underlying paper/dataset
+and provides real train/validation/test splits in Odia. See DATASET_REPO
+below for details.
 """
 import argparse
 import json
@@ -46,11 +55,22 @@ from transformers import (
 
 LANG = "or"  # Odia
 MODEL_NAME = "ai4bharat/IndicBERTv2-MLM-only"
-# Group's dataset link (ai4bharat/IndicXNLI-Translated) appears to be a small
-# eval-only mirror (no per-language train split for fine-tuning). We try it
-# first and fall back to the full IndicXNLI release (train/validation/test,
-# identical content, same paper) which definitely has all three splits.
-DATASET_CANDIDATES = ["ai4bharat/IndicXNLI-Translated", "Divyanshu/indicxnli"]
+# The group's assigned dataset link (ai4bharat/IndicXNLI-Translated) was
+# inspected directly (the parquet files distributed for this assignment)
+# and does NOT contain genuine Odia-script text. Its per-language "itv2 <lang>
+# premise/hypothesis" columns are English back-translations used for
+# IndicTrans2 translation-quality scoring (chrF++), not native-script data —
+# the top-level premise/hypothesis columns are Hindi, and no config exposes
+# real Odia sentences. It also has no train split (validation=2490,
+# test=5010 rows only), so it cannot be used for fine-tuning OR for a valid
+# Odia benchmark-test evaluation.
+#
+# We therefore load Odia data exclusively from the full IndicXNLI release
+# (Divyanshu/indicxnli), which is the same paper/content and provides
+# genuine translated Odia premise/hypothesis pairs with all three splits.
+# ai4bharat/IndicXNLI-Translated is still cited in the report as the dataset
+# link given in the assignment, but no data is actually read from it.
+DATASET_REPO = "Divyanshu/indicxnli"
 NUM_LABELS = 3  # 0 = entailment, 1 = neutral, 2 = contradiction (see dataset card)
 MAX_SEQ_LEN = 128
 TARGET_ACCURACY = 72.6  # Table 16, IndicBERTv2-MLM-only, Odia ('or')
@@ -83,27 +103,24 @@ def compute_metrics(eval_pred):
 
 
 def load_indicxnli(lang):
-    """Try each candidate dataset repo in order; use the first that has a
-    usable train split for the given language config."""
-    last_err = None
-    for repo in DATASET_CANDIDATES:
-        try:
-            print(f"Trying to load {repo!r} (config={lang!r})...")
-            raw = load_dataset(repo, lang)
-            print(raw)
-            if "train" in raw and len(raw["train"]) > 1000:
-                print(f"Using {repo!r} — has a train split with {len(raw['train'])} examples.")
-                return raw, repo
-            else:
-                print(f"{repo!r} has no usable train split for fine-tuning "
-                      f"(likely an eval-only mirror) — trying next candidate.")
-        except Exception as e:  # noqa: BLE001
-            print(f"Could not load {repo!r} with config {lang!r}: {e}")
-            last_err = e
-    raise RuntimeError(
-        f"None of {DATASET_CANDIDATES} yielded a usable train split for '{lang}'. "
-        f"Last error: {last_err}"
-    )
+    """Load real Odia-script IndicXNLI data from Divyanshu/indicxnli.
+
+    (See the note above DATASET_REPO for why ai4bharat/IndicXNLI-Translated
+    is deliberately not used as a data source.)
+    """
+    print(f"Loading {DATASET_REPO!r} (config={lang!r})...")
+    raw = load_dataset(DATASET_REPO, lang)
+    print(raw)
+    for split in ("train", "validation", "test"):
+        if split not in raw or len(raw[split]) == 0:
+            raise RuntimeError(
+                f"{DATASET_REPO!r} config {lang!r} is missing a usable "
+                f"'{split}' split. Got: {raw}"
+            )
+    print(f"Loaded {DATASET_REPO!r} — "
+          f"train={len(raw['train'])}, validation={len(raw['validation'])}, "
+          f"test={len(raw['test'])}.")
+    return raw, DATASET_REPO
 
 
 def main():
