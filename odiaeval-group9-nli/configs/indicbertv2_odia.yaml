@@ -1,0 +1,61 @@
+# OdiaEval — Group 9 — Task M2 (Natural Language Inference)
+# Every value here is pinned. Do not edit without recording the change in docs/RESULTS.md.
+
+experiment:
+  group: 9
+  task: "Natural Language Inference (NLI)"
+  language: "Odia (ory / or)"
+  seed: 42
+
+model:
+  # Pinned exactly as specified in the project brief.
+  name: "ai4bharat/IndicBERTv2-MLM-only"
+  revision: "main"          # replaced with the resolved commit SHA at runtime
+  num_labels: 3
+  max_seq_length: 128        # IndicXNLI paper (Aggarwal et al. 2022), Table 5 (MSL)
+
+data:
+  # IndicXNLI, Odia split. Sizes are fixed by the benchmark and MUST NOT be changed.
+  train_file: "data/benchmark/indicxnli-train.parquet"
+  validation_file: "data/benchmark/indicxnli-validation.parquet"
+  test_file: "data/benchmark/indicxnli-test.parquet"
+  expected_sizes:
+    train: 392702
+    validation: 2490
+    test: 5010
+  # XNLI label convention, inherited from the HuggingFace dataset schema.
+  label_names: ["entailment", "neutral", "contradiction"]   # 0, 1, 2
+
+training:
+  # Source: Doddapaneni et al. (ACL 2023), Table 13, row "IndicXNLI / IndicBERT",
+  # column "Best IN" (in-language validation set, which is what we have: 2,490 Odia).
+  learning_rate: 3.0e-5
+  weight_decay: 0.01
+  num_train_epochs: 4        # "B*" (best epoch) = 4 in the same row
+  per_device_train_batch_size: 32   # paper: "unless otherwise mentioned we use a batch size of 32"
+  per_device_eval_batch_size: 128
+  gradient_accumulation_steps: 1
+  warmup_ratio: 0.1          # paper: "an initial warmup of 10%"
+  optimizer: "adamw_torch"
+  lr_scheduler_type: "linear"
+  fp16: true                 # paper: "fine-tuned with half-precision"
+  max_grad_norm: 1.0
+  # Checkpoint selection is on VALIDATION accuracy only. Test labels are never seen.
+  eval_strategy: "epoch"
+  save_strategy: "epoch"
+  metric_for_best_model: "accuracy"
+  greater_is_better: true
+  load_best_model_at_end: true
+  save_total_limit: 2
+  early_stopping_patience: 2
+  logging_steps: 200
+
+output:
+  model_dir: "artifacts/indicbertv2-odia-nli"
+  results_dir: "results"
+
+targets:
+  # Doddapaneni et al. (ACL 2023), Table 16 (IndicXNLI, per-language accuracy),
+  # row "IndicBERT", column "or" (Odia) = 72.6
+  published_accuracy: 72.6
+  tolerance_points: 2.0

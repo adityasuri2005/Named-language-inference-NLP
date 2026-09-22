@@ -1,0 +1,73 @@
+{
+  "split_sizes": {
+    "train": 392702,
+    "validation": 2490,
+    "test": 5010
+  },
+  "split_sizes_match_published": true,
+  "label_distribution": {
+    "train": {
+      "entailment": 130899,
+      "neutral": 130900,
+      "contradiction": 130903
+    },
+    "validation": {
+      "entailment": 830,
+      "neutral": 830,
+      "contradiction": 830
+    },
+    "test": {
+      "entailment": 1670,
+      "neutral": 1670,
+      "contradiction": 1670
+    }
+  },
+  "script_verification": [
+    {
+      "split": "train",
+      "sampled_rows": 3000,
+      "mean_odia_ratio": 0.996,
+      "median_odia_ratio": 1.0,
+      "pct_rows_above_0.9": 98.95,
+      "min_odia_ratio": 0.0,
+      "verdict": "PASS - text is Odia script"
+    },
+    {
+      "split": "validation",
+      "sampled_rows": 2490,
+      "mean_odia_ratio": 0.9971,
+      "median_odia_ratio": 1.0,
+      "pct_rows_above_0.9": 98.96,
+      "min_odia_ratio": 0.0,
+      "verdict": "PASS - text is Odia script"
+    },
+    {
+      "split": "test",
+      "sampled_rows": 3000,
+      "mean_odia_ratio": 0.9967,
+      "median_odia_ratio": 1.0,
+      "pct_rows_above_0.9": 98.8,
+      "min_odia_ratio": 0.2549,
+      "verdict": "PASS - text is Odia script"
+    }
+  ],
+  "leakage": {
+    "unique_pairs": {
+      "train": 392308,
+      "validation": 2490,
+      "test": 5008
+    },
+    "overlaps": {
+      "train__vs__validation": 0,
+      "train__vs__test": 0,
+      "validation__vs__test": 0
+    },
+    "train_eval_contamination": {},
+    "verdict": "PASS - no training pair appears in any evaluation split"
+  },
+  "file_hashes": {
+    "train": "9ef0042ce5a4bc871a6dd58e0357d63995deaa8bcd1a09ac26cdc8348edbbd5a",
+    "validation": "23cf103293ec02b03364a21e2944bccb1d8ca1e93f388df973a7f122b1b0a8ba",
+    "test": "471d62f0512310c77aed007acc6d3ac4cb2ad011c196e074fe849a2f9e407ebf"
+  }
+}
