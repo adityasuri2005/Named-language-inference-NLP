@@ -1,0 +1,25 @@
+{
+  "native_file": "03_nli_groups_3_9_updated.jsonl",
+  "n_examples": 264,
+  "native_odia_accuracy_pct": 84.84848484848484,
+  "benchmark_test_accuracy_pct": 75.20958083832335,
+  "translationese_gap_pts": -9.638904010161497,
+  "classification_report": "              precision    recall  f1-score   support\n\n           0     0.8611    0.7045    0.7750        88\n           1     0.7850    0.9545    0.8615        88\n           2     0.9176    0.8864    0.9017        88\n\n    accuracy                         0.8485       264\n   macro avg     0.8546    0.8485    0.8461       264\nweighted avg     0.8546    0.8485    0.8461       264\n",
+  "confusion_matrix": [
+    [
+      62,
+      21,
+      5
+    ],
+    [
+      2,
+      84,
+      2
+    ],
+    [
+      8,
+      2,
+      78
+    ]
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "note": "Created post hoc by evaluating a saved checkpoint on the full benchmark test set.",
+  "model": "ai4bharat/IndicBERTv2-MLM-only",
+  "checkpoint": "indicbertv2-odia-nli-failed/checkpoint-18405",
+  "test_file": "indicxnli-test.parquet",
+  "n_test": 5010,
+  "target_accuracy_pct": 72.6,
+  "benchmark_test_accuracy_pct": 75.20958083832335,
+  "difference_pts": 2.609580838323353,
+  "classification_report": "              precision    recall  f1-score   support\n\n           0     0.8316    0.6832    0.7502      1670\n           1     0.6747    0.7850    0.7257      1670\n           2     0.7764    0.7880    0.7822      1670\n\n    accuracy                         0.7521      5010\n   macro avg     0.7609    0.7521    0.7527      5010\nweighted avg     0.7609    0.7521    0.7527      5010\n",
+  "confusion_matrix": [
+    [
+      1141,
+      348,
+      181
+    ],
+    [
+      161,
+      1311,
+      198
+    ],
+    [
+      70,
+      284,
+      1316
+    ]
+  ]
+}
